@@ -10,13 +10,15 @@ jobs:
     name: Deploy
     # Change below line to: `runs-on: ubuntu-latest` if not using self-hosted runners or if it is a public repo.
     runs-on: self-hosted
-    steps:
-    - uses: actions/checkout@v4
-    - name: Deploy
-      uses: rtCamp/action-deploy-wordpress@master
+    container:
+      image: rtCamp/action-deploy-wordpress
       env:
         SSH_PRIVATE_KEY: ${{ secrets.ED_DEPLOYMENT_KEY }}
         WP_VERSION: latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Deploy
+      run: /entrypoint.sh
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@master
       env:
